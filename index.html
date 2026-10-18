@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studiu de caz: Lumea Nouă - Cunoaștere, Misionarism și Exploatare</title>
+    <style>
+        :root {
+            --primary-color: #1b4965;
+            --secondary-color: #62b6cb;
+            --accent-color: #e63946;
+            --light-bg: #edf6f9;
+            --card-bg: #ffffff;
+            --text-color: #2b2d42;
+            --success: #2a9d8f;
+            --error: #e63946;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* BARĂ DE NAVIGARE FIXĂ */
+        nav.top-nav {
+            position: sticky;
+            top: 0;
+            background-color: var(--primary-color);
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 12px 20px;
+            flex-wrap: wrap;
+        }
+
+        nav.top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9em;
+            padding: 8px 14px;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        nav.top-nav a:hover {
+            background-color: var(--secondary-color);
+            color: #0f2537;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), #0f2537);
+            color: #ffffff;
+            padding: 30px 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2em;
+            color: #ffffff;
+        }
+
+        header h2 {
+            margin: 0;
+            font-size: 1.3em;
+            color: #ffffff;
+            border-bottom: none;
+        }
+
+        .subtitle-box {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border-left: 6px solid var(--primary-color);
+            scroll-margin-top: 80px;
+        }
+
+        .section-card h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 8px;
+            margin-top: 0;
+        }
+
+        .exercise-container {
+            background: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+
+        .badge {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .interactive-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+            margin-top: 15px;
+        }
+
+        .interactive-btn:hover {
+            background-color: #0f2537;
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .feedback.correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        /* SELECT STYLING */
+        select {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid #a0aec0;
+            background-color: white;
+            font-size: 0.95em;
+            margin: 0 4px;
+            transition: all 0.2s ease;
+        }
+
+        select.hide-arrow {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: none !important;
+            padding-right: 12px !important;
+            border-color: var(--primary-color);
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* DRAG AND DROP STYLES */
+        .drag-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+            min-height: 50px;
+        }
+
+        .drag-item {
+            background: white;
+            border: 2px solid var(--secondary-color);
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: grab;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .drag-item:active { cursor: grabbing; }
+        .drag-item.dragging { opacity: 0.5; background: #e2e8f0; }
+
+        .journal-drop-zone {
+            background-color: #ffffff;
+            border: 2px dashed #0284c7;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 120px;
+            margin-top: 10px;
+        }
+
+        .journal-pool-zone {
+            background-color: #e2e8f0;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        /* FLASHCARDS */
+        .flashcard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .flashcard {
+            background: white;
+            border: 2px solid var(--secondary-color);
+            border-radius: 8px;
+            height: 140px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 6px;
+        }
+
+        .flashcard-front { background-color: #e0f2fe; color: var(--primary-color); font-weight: bold; }
+        .flashcard-back { background-color: var(--primary-color); color: white; transform: rotateY(180deg); }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .info-card { padding: 15px; border-radius: 8px; color: white; }
+        .info-dict { background-color: #0284c7; }
+        .info-method { background-color: #7c3aed; }
+        .info-remember { background-color: #d97706; }
+
+        .test-q {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .source-box {
+            background-color: #f8fafc;
+            border-left: 4px solid var(--secondary-color);
+            padding: 12px 16px;
+            font-style: italic;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="top-nav">
+    <a href="#cap1">1. Vechi civilizații</a>
+    <a href="#cap2">2. Misionarismul</a>
+    <a href="#cap3">3. Supunere și exploatare</a>
+    <a href="#comert">Comerțul Triunghiular</a>
+    <a href="#dictionar">Dicționar & De Reținut</a>
+    <a href="#evaluare">Test Evaluativ</a>
+</nav>
+
+<div class="container">
+
+    <header>
+        <h1>STUDIU DE CAZ: LUMEA NOUĂ</h1>
+        <h2>CUNOAȘTERE, MISIONARISM ȘI EXPLOATARE</h2>
+        <div class="subtitle-box">
+            Cum s-a realizat întâlnirea dintre civilizația europeană și popoarele precolumbiene?
+        </div>
+    </header>
+
+    <!-- SECȚIUNEA 1 -->
+    <div class="section-card" id="cap1">
+        <h2>1. Vechi civilizații și culturi</h2>
+        <p>Europenii au descoperit în Lumea Nouă populații amerindiene cu obiceiuri și credințe specifice. Deși se aflau tehnologic într-un stadiu similar Preistoriei, acestea au creat civilizații agrare avansate, bazate în principal pe cultura porumbului.</p>
+        <ul>
+            <li><strong>Mayașii:</strong> Localizați în Peninsula Yucatan (Mexic), aveau cunoștințe matematice și astronomice deosebite și au construit temple-piramide impresionante din piatră.</li>
+            <li><strong>Aztecii:</strong> Popor războinic ce a întemeiat orașul Tenochtitlan (azi, Ciudad de Mexico), centru al unui vast imperiu.</li>
+            <li><strong>Incașii:</strong> Au creat un imperiu de-a lungul coastei de vest a Americii de Sud, condus de Mărețul Inca (regele).</li>
+        </ul>
+
+        <div class="exercise-container">
+            <span class="badge">Exercițiul 1.1 | Identificare Civilizații</span>
+            <h3>🏛️ Caracteristicile Popoarelor Precolumbiene</h3>
+            <p>1. Construcțiile din piatră în trepte ale mayașilor aveau un caracter <select class="auto-hide" id="ex1_1"></select>.</p>
+            <p>2. Principala plantă de cultură pe care se baza agricultura amerindienilor era <select class="auto-hide" id="ex1_2"></select>.</p>
+            <p>3. Amestecul dintre populațiile indigene și europeni a creat civilizația <select class="auto-hide" id="ex1_3"></select>.</p>
+            <button class="interactive-btn" onclick="checkEx1()">Verifică Răspunsul</button>
+            <div class="feedback" id="ex1-feedback"></div>
+        </div>
+
+        <div class="exercise-container">
+            <span class="badge">Exercițiul 1.2 | Carduri de Memorie</span>
+            <h3>🎴 Repere ale Americii Precolumbiene</h3>
+            <div class="flashcard-grid">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">Unde au trăit mayașii?</div>
+                        <div class="flashcard-back">În Peninsula Yucatan (Mexic).</div>
+                    </div>
+                </div>
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">Care era capitala Imperiului Aztec?</div>
+                        <div class="flashcard-back">Tenochtitlan (azi Ciudad de Mexico).</div>
+                    </div>
+                </div>
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">Cine conducea Imperiul Incaș?</div>
+                        <div class="flashcard-back">Marele Inca (regele).</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECȚIUNEA 2 -->
+    <div class="section-card" id="cap2">
+        <h2>2. Misionarismul. Convertirea la creștinism</h2>
+        <p>Stăpânirea spaniolă și portugheză a fost însoțită de o activitate intensă de creștinare a populațiilor indigene. Biserica catolică a urmărit convertirea amerindienilor prin intermediul misionarilor. Prima organizație misionară a fost întemeiată în 1523 în Noua Spanie.</p>
+        <p>Unii misionari au lăsat mărturii valoroase despre abuzurile asupra indigenilor și au încercat să-i protejeze, precum spaniolul <strong>Bartolomé de Las Casas</strong> („Părintele indienilor”) sau portughezul <strong>Manuel da Nóbrega</strong>.</p>
+
+        <div class="exercise-container">
+            <span class="badge">Exercițiul 2.1 | Analiză pe Textul Istoric</span>
+            <h3>📜 Mărturia misionarului Bartolomé de Las Casas</h3>
+            <div class="source-box">
+                „Spaniolii au distrus aici zece regate... În decursul a 40 de ani, din cauza spaniolilor, peste 12 milioane de suflete au pierit din războaie nedrepte, epidemii și prin exploatarea până la epuizare. Motivul a fost numai dorința neostogolită de aur, de îmbogățire.”
+            </div>
+            <p>1. Din ce cauză au pierit milioane de amerindieni conform textului? <select class="auto-hide" id="ex2_1"></select></p>
+            <p>2. Care era principalul mobil al cuceritorilor europeni? <select class="auto-hide" id="ex2_2"></select></p>
+            <button class="interactive-btn" onclick="checkEx2()">Verifică Răspunsul</button>
+            <div class="feedback" id="ex2-feedback"></div>
+        </div>
+    </div>
+
+    <!-- SECȚIUNEA 3 -->
+    <div class="section-card" id="cap3">
+        <h2>3. Supunere și exploatare</h2>
+        <p>În teritoriile ocupate, europenii au impus un regim de dură exploatare. Pământul a fost împărțit în plantații întinse (ceai, cafea, cacao, trestie de zahăr), iar subsolul a fost exploatat în mine de aur, argint și cupru.</p>
+        <p>Din cauza muncilor epuizante și a epidemiilor aduse din Europa, numărul amerindienilor a scăzut dramatic. Pentru a-și asigura forța de muncă necesară, colonizatorii au recurs la aducerea sclavilor negri din Africa.</p>
+
+        <div class="exercise-container">
+            <span class="badge">Exercițiul 3.1 | Drag & Drop: Succesiunea Evenimentelor</span>
+            <h3>🧩 Ordonează logic și cronologic faptele istorice!</h3>
+            <p>Trage doar <strong>afirmațiile adevărate</strong> în caseta albă de sus în ordinea lor logică. Lasă afară cele două afirmații false (intrușii)!</p>
+            
+            <p><strong>📋 Caseta Ordinii Corecte:</strong></p>
+            <div class="drag-container journal-drop-zone" id="drop-zone"></div>
+
+            <p style="margin-top: 15px;"><strong>📦 Banca de opțiuni:</strong></p>
+            <div class="drag-container journal-pool-zone" id="pool-zone"></div>
+
+            <button class="interactive-btn" onclick="checkDropZone()">Verifică Ordinea</button>
+            <div class="feedback" id="ex3-feedback"></div>
+        </div>
+    </div>
+
+    <!-- SECȚIUNEA COMERȚ TRIUNGHIULAR -->
+    <div class="section-card" id="comert">
+        <h2>⛵ Comerțul Triunghiular</h2>
+        <p>Exploatarea intensă a resurselor Americii a dus la apariția unui sistem comercial transatlantic desfășurat pe trei rute principale:</p>
+        <ol>
+            <li><strong>Ruta 1 (Europa ➔ Africa):</strong> Negustorii duceau mărfuri manufacturate ieftine.</li>
+            <li><strong>Ruta 2 (Africa ➔ America):</strong> Mărfurile erau schimbate pe sclavi africani, care erau transportați în Lumea Nouă.</li>
+            <li><strong>Ruta 3 (America ➔ Europa):</strong> Produsele obținute din munca sclavilor și indigenilor (aur, argint, zahăr, cacao) erau vândute scump pe piețele europene.</li>
+        </ol>
+
+        <div class="exercise-container">
+            <span class="badge">Exercițiul 3.2 | Verificare Rute Comerciale</span>
+            <h3>🗺️ Identificarea etapelor Comerțului Triunghiular</h3>
+            <p>1. Ce se transporta pe ruta dintre Africa și America? <select class="auto-hide" id="ex_com_1"></select></p>
+            <p>2. Ce ajungea în Europa de pe plantațiile din America? <select class="auto-hide" id="ex_com_2"></select></p>
+            <button class="interactive-btn" onclick="checkCommerce()">Verifică Răspunsul</button>
+            <div class="feedback" id="com-feedback"></div>
+        </div>
+    </div>
+
+    <!-- DICȚIONAR & REȚINUT -->
+    <div class="info-cards" id="dictionar">
+        <div class="info-card info-dict">
+            <h3>📖 Dicționar Istoric</h3>
+            <p><strong>Amerindian:</strong> Locuitor al continentului american dinaintea sosirii europenilor.</p>
+            <p><strong>Exploatare:</strong> Asuprirea și folosirea abuzivă a populațiilor din Lumea Nouă.</p>
+            <p><strong>Plantație:</strong> Suprafețe agricole întinse pe care se cultivau produse tropicale.</p>
+        </div>
+
+        <div class="info-card info-method">
+            <h3>💡 Metodă de Învățare</h3>
+            <p><strong>Compararea Surselor:</strong> Compară scrisoarea lui Columb (care descria băștinașii ca fiind pașnici) cu relatările lui Las Casas pentru a înțelege evoluția atitudinii europenilor față de indigeni.</p>
+        </div>
+
+        <div class="info-card info-remember">
+            <h3>📌 De Reținut</h3>
+            <ul>
+                <li>Lumea Nouă găzduia civilizații dezvoltate (mayași, azteci, incași).</li>
+                <li>Misionarii au răspândit catolicismul, iar unii au denunțat abuzurile.</li>
+                <li>Exploatarea minelor și plantațiilor a dus la introducerea muncii de sclavie.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- TEST EVALUATIV FINAL -->
+    <div class="section-card" id="evaluare" style="margin-top: 30px; border-left-color: var(--accent-color);">
+        <h2>📝 Test Evaluativ Final (10 Întrebări)</h2>
+        <p>Verifică-ți cunoștințele din studiul de caz:</p>
+        <div id="quiz-container"></div>
+        <button class="interactive-btn" style="background-color: var(--accent-color);" onclick="checkQuiz()">Trimite Testul Evaluativ</button>
+        <div class="feedback" id="quiz-feedback"></div>
+    </div>
+
+</div>
+
+<script>
+    function shuffle(array) {
+        let currentIndex = array.length, randomIndex;
+        while (currentIndex != 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    }
+
+    function setupHideArrowListeners() {
+        document.querySelectorAll('select.auto-hide').forEach(select => {
+            select.addEventListener('change', function() {
+                if (this.value !== "") {
+                    this.classList.add('hide-arrow');
+                } else {
+                    this.classList.remove('hide-arrow');
+                }
+            });
+        });
+    }
+
+    // Exercițiul 1
+    function initEx1() {
+        let o1 = shuffle(["religios", "militar", "comercial"]);
+        let o2 = shuffle(["porumbul", "grâul", "orezul"]);
+        let o3 = shuffle(["Latino-Americană", "Aziațică", "Africană"]);
+
+        document.getElementById('ex1_1').innerHTML = '<option value="">-- opțiune --</option>' + o1.map(o=>`<option value="${o}">${o}</option>`).join('');
+        document.getElementById('ex1_2').innerHTML = '<option value="">-- opțiune --</option>' + o2.map(o=>`<option value="${o}">${o}</option>`).join('');
+        document.getElementById('ex1_3').innerHTML = '<option value="">-- opțiune --</option>' + o3.map(o=>`<option value="${o}">${o}</option>`).join('');
+    }
+
+    function checkEx1() {
+        let v1 = document.getElementById('ex1_1').value === "religios";
+        let v2 = document.getElementById('ex1_2').value === "porumbul";
+        let v3 = document.getElementById('ex1_3').value === "Latino-Americană";
+        let fb = document.getElementById('ex1-feedback');
+
+        if(v1 && v2 && v3) {
+            fb.className = 'feedback correct';
+            fb.innerText = 'Corect! Piramidele aveau scop religios, cultura de bază era porumbul, iar sinteza culturală a format America Latină.';
+        } else {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Incorect. Recitește paragrafele referitoare la vechile civilizații!';
+        }
+    }
+
+    // Exercițiul 2
+    function initEx2() {
+        let o1 = shuffle(["Muncile epuizante și bolile", "Războaiele dintre triburi", "Seceta prelungită"]);
+        let o2 = shuffle(["Căutarea de aur și bogăție", "Răspândirea științei", "Schimburile culturale echitabile"]);
+
+        document.getElementById('ex2_1').innerHTML = '<option value="">-- opțiune --</option>' + o1.map(o=>`<option value="${o}">${o}</option>`).join('');
+        document.getElementById('ex2_2').innerHTML = '<option value="">-- opțiune --</option>' + o2.map(o=>`<option value="${o}">${o}</option>`).join('');
+    }
+
+    function checkEx2() {
+        let v1 = document.getElementById('ex2_1').value === "Muncile epuizante și bolile";
+        let v2 = document.getElementById('ex2_2').value === "Căutarea de aur și bogăție";
+        let fb = document.getElementById('ex2-feedback');
+
+        if(v1 && v2) {
+            fb.className = 'feedback correct';
+            fb.innerText = 'Excelent! Ai analizat corect mărturia istorică a lui Las Casas.';
+        } else {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Atenție! Reanalizează textul sursă de la punctul 2.';
+        }
+    }
+
+    // DRAG AND DROP
+    const dragData = [
+        { id: "d1", order: 1, text: "Europenii descoperă și contactează civilizațiile precolumbiene.", isCorrect: true },
+        { id: "d2", order: 2, text: "Misionarii catolici încep creștinarea amerindienilor în Noul Spanie.", isCorrect: true },
+        { id: "d3", order: 3, text: "Populația indigenă scade dramatic din cauza muncii grele și a epidemiilor.", isCorrect: true },
+        { id: "d4", order: 4, text: "Debutul aducerii sclavilor africani pentru a munci pe plantații și în mine.", isCorrect: true },
+        { id: "d5", order: 99, text: "Amerindienii au cucerit Europa folosind flota lor de corăbii.", isCorrect: false },
+        { id: "d6", order: 99, text: "Sclavia a fost interzisă complet de regele Spaniei imediat după 1492.", isCorrect: false }
+    ];
+
+    function initDragDrop() {
+        const pool = document.getElementById('pool-zone');
+        const drop = document.getElementById('drop-zone');
+        pool.innerHTML = '';
+        drop.innerHTML = '';
+
+        shuffle([...dragData]).forEach(item => {
+            let el = document.createElement('div');
+            el.className = 'drag-item';
+            el.draggable = true;
+            el.dataset.order = item.order;
+            el.dataset.correct = item.isCorrect;
+            el.innerHTML = `<span>☰</span> <span>${item.text}</span>`;
+            
+            el.addEventListener('dragstart', () => el.classList.add('dragging'));
+            el.addEventListener('dragend', () => el.classList.remove('dragging'));
+
+            pool.appendChild(el);
+        });
+
+        setupContainer(pool);
+        setupContainer(drop);
+    }
+
+    function setupContainer(container) {
+        container.addEventListener('dragover', e => {
+            e.preventDefault();
+            const afterElement = getAfterElement(container, e.clientY);
+            const dragging = document.querySelector('.dragging');
+            if (dragging) {
+                if (afterElement == null) {
+                    container.appendChild(dragging);
+                } else {
+                    container.insertBefore(dragging, afterElement);
+                }
+            }
+        });
+    }
+
+    function getAfterElement(container, y) {
+        const draggables = [...container.querySelectorAll('.drag-item:not(.dragging)')];
+        return draggables.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
+    function checkDropZone() {
+        const items = [...document.querySelectorAll('#drop-zone .drag-item')];
+        const fb = document.getElementById('ex3-feedback');
+
+        if(items.length === 0) {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Trage opțiunile din caseta de jos în cea de sus!';
+            return;
+        }
+
+        let hasFalse = items.some(i => i.dataset.correct === "false");
+        if(hasFalse) {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Ai adăugat o afirmație istorică falsă! Scoate intrusul.';
+            return;
+        }
+
+        if(items.length !== 4) {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Nu ai selectat toate cele 4 etape reale.';
+            return;
+        }
+
+        let isOrdered = true;
+        for(let i = 0; i < items.length; i++) {
+            if(parseInt(items[i].dataset.order) !== (i + 1)) {
+                isOrdered = false;
+                break;
+            }
+        }
+
+        if(isOrdered) {
+            fb.className = 'feedback correct';
+            fb.innerText = '🎉 Bravo! Ai ordonat corect etapele istorice ale exploatării Lumii Noi!';
+        } else {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Afirmațiile alese sunt reale, dar ordinea lor cronologică nu este corectă!';
+        }
+    }
+
+    // Exercițiul Comerț Triunghiular
+    function initCommerce() {
+        let o1 = shuffle(["Sclavi africani", "Mărfuri textile ieftine", "Meteoriți"]);
+        let o2 = shuffle(["Produse tropicale și metale prețioase", "Arme de foc", "Cai"]);
+
+        document.getElementById('ex_com_1').innerHTML = '<option value="">-- încărcătură --</option>' + o1.map(o=>`<option value="${o}">${o}</option>`).join('');
+        document.getElementById('ex_com_2').innerHTML = '<option value="">-- mărfuri --</option>' + o2.map(o=>`<option value="${o}">${o}</option>`).join('');
+    }
+
+    function checkCommerce() {
+        let v1 = document.getElementById('ex_com_1').value === "Sclavi africani";
+        let v2 = document.getElementById('ex_com_2').value === "Produse tropicale și metale prețioase";
+        let fb = document.getElementById('com-feedback');
+
+        if(v1 && v2) {
+            fb.className = 'feedback correct';
+            fb.innerText = 'Corect! Comerțul triunghiular lega Europa, Africa și America prin aceste schimburi.';
+        } else {
+            fb.className = 'feedback incorrect';
+            fb.innerText = 'Incorect. Revedeți cele trei rute ale comerțului transatlantic.';
+        }
+    }
+
+    // TEST EVALUATIV 10 ÎNTREBĂRI
+    const quizData = [
+        { q: "1. Ce civilizație precolumbiană s-a dezvoltat în Peninsula Yucatan?", options: ["Mayașii", "Incașii", "Egiptenii", "Romanii"], ans: "Mayașii" },
+        { q: "2. Care era orașul-capitală fondat de azteci?", options: ["Tenochtitlan", "Cuzco", "Tulum", "Lisabona"], ans: "Tenochtitlan" },
+        { q: "3. Cum se numea conducătorul suprem al Imperiului Incaș?", options: ["Marele Inca", "Faraonul", "Marele Han", "Sultanul"], ans: "Marele Inca" },
+        { q: "4. Care a fost principala plantă de cultură a populațiilor amerindiene?", options: ["Porumbul", "Grâul", "Orezul", "Orzul"], ans: "Porumbul" },
+        { q: "5. În ce an s-a întemeiat prima organizație misionară în Noua Spanie?", options: ["1523", "1492", "1600", "1532"], ans: "1523" },
+        { q: "6. Cine a fost numit «Părintele indienilor» pentru apărarea drepturilor indigenilor?", options: ["Bartolomé de Las Casas", "Hernán Cortés", "Francisco Pizarro", "Cristofor Columb"], ans: "Bartolomé de Las Casas" },
+        { q: "7. Ce sursă de forță de muncă au adus europenii în America după scăderea numărului de indigeni?", options: ["Sclavi din Africa", "Muncitori din Asia", "Mercenari europeni", "Prizonieri din Australia"], ans: "Sclavi din Africa" },
+        { q: "8. Ce tip de teren agricol întins era folosit pentru trestia de zahăr și cacao?", options: ["Plantație", "Feudă", "Cisterna", "Oază"], ans: "Plantație" },
+        { q: "9. Ce rută a comerțului triunghiular lega Africa de America?", options: ["Transportul sclavilor africani", "Transportul de aur spre Europa", "Exportul de stofe din Spania", "Importul de condimente din India"], ans: "Transportul sclavilor africani" },
+        { q: "10. Ce nouă civilizație s-a format prin amestecul culturilor europene și amerindiene?", options: ["Civilizația Americii Latine", "Civilizația Bizantină", "Civilizația Atlantică", "Civilizația Mesopotamiană"], ans: "Civilizația Americii Latine" }
+    ];
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+        quizData.forEach((qObj, idx) => {
+            let div = document.createElement('div');
+            div.className = 'test-q';
+            div.innerHTML = `<p><strong>${qObj.q}</strong></p>`;
+            shuffle([...qObj.options]).forEach(opt => {
+                div.innerHTML += `<label style="display:block; margin:4px 0;"><input type="radio" name="q_${idx}" value="${opt}"> ${opt}</label>`;
+            });
+            container.appendChild(div);
+        });
+    }
+
+    function checkQuiz() {
+        let score = 0;
+        quizData.forEach((qObj, idx) => {
+            let sel = document.querySelector(`input[name="q_${idx}"]:checked`);
+            if(sel && sel.value === qObj.ans) score++;
+        });
+
+        let fb = document.getElementById('quiz-feedback');
+        if(score === quizData.length) {
+            fb.className = 'feedback correct';
+            fb.innerText = `🏆 Excelent! Ai obținut punctajul maxim: ${score}/${quizData.length}!`;
+        } else {
+            fb.className = 'feedback incorrect';
+            fb.innerText = `Ai obținut ${score} din ${quizData.length} puncte. Recitește studiul de caz și reîncearcă!`;
+        }
+    }
+
+    window.onload = () => {
+        initEx1();
+        initEx2();
+        initDragDrop();
+        initCommerce();
+        initQuiz();
+        setupHideArrowListeners();
+    };
+</script>
+
+</body>
+</html>
